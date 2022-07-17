@@ -41,10 +41,10 @@ class WeatherPage extends StatelessWidget {
   Widget _selectPageByState(WeatherState state) {
     if (state is SuccessState) {
       return SuccessPage(state);
-    } else if (state is NotFoundState) {
-      return const NotFoundPage();
+    } else if (state is FailState) {
+      return FailPage(state);
     } else {
-      return const FailPage();
+      return const NotFoundPage();
     }
   }
 
@@ -66,13 +66,7 @@ class WeatherPage extends StatelessWidget {
                         cityName: state.cityName, units: state.units))))
           ],
         ),
-        body: RefreshIndicator(
-            onRefresh: () => BlocProvider.of<WeatherCubit>(context)
-                .fetchCurrentWeather(state.cityName, state.units),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: _selectPageByState(state),
-            )),
+        body: _selectPageByState(state),
       );
     });
   }

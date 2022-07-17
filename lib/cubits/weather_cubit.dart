@@ -23,6 +23,8 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
             units: units));
       } else if (body['cod'] == '404') {
         emit(NotFoundState(cityName: cityName, units: units));
+      } else if (body['cod'] == 401) {
+        print('Invalid API key');
       }
     } on HttpException catch (_) {
       emit(FailState(cityName: cityName, units: units));
