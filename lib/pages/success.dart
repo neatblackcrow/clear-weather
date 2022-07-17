@@ -31,7 +31,7 @@ class SuccessPage extends StatelessWidget {
                           color: Colors.white,
                         ),
                         Text(
-                          state.data.name,
+                          state.locationName,
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium!
@@ -43,7 +43,7 @@ class SuccessPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text(
-                          '${state.data.weather[0].main} : ${state.data.weather[0].description}',
+                          '${state.weather} : ${state.weatherDescription}',
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium!
@@ -67,21 +67,21 @@ class SuccessPage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            WeatherIcon(iconCode: state.data.weather[0].icon),
+                            WeatherIcon(iconCode: state.iconCode),
                             Column(
                               children: <Widget>[
                                 Text(
-                                  '${state.data.main.temp}°',
+                                  '${state.currentTemp}°',
                                   style:
                                       Theme.of(context).textTheme.displayMedium,
                                 ),
                                 Text(
-                                  'Feels like ${state.data.main.feelsLike}°',
+                                  'Feels like ${state.feelsLike}°',
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
                                 Text(
-                                  'H ${state.data.main.tempMax}° / L ${state.data.main.tempMin}°',
+                                  'H ${state.maxTemp}° / L ${state.minTemp}°',
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
@@ -116,7 +116,7 @@ class SuccessPage extends StatelessWidget {
                                 width: 12,
                               ),
                               Text(
-                                '${state.data.main.humidity} %',
+                                '${state.humidity} %',
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ],
@@ -132,11 +132,7 @@ class SuccessPage extends StatelessWidget {
                                 width: 12,
                               ),
                               Text(
-                                (state.units == Units.metric)
-                                    ? '${state.data.wind.speed} m/s'
-                                    : (state.units == Units.standard)
-                                        ? '${state.data.wind.speed} m/s'
-                                        : '${state.data.wind.speed} mph',
+                                '${state.windSpeed} ${(state.units == Units.metric || state.units == Units.standard) ? 'm/s' : 'mph'}',
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ],

@@ -1,9 +1,18 @@
+import 'package:clear_weather/auth/secret_loader.dart';
 import 'package:http/http.dart' as http;
 
 class WeatherClient extends http.BaseClient {
-  final String _appId = ''; // Put your API key here.
+  late final String _appId;
   final String _baseUrl = 'https://api.openweathermap.org/data/2.5/';
   final http.Client _inner = http.Client();
+
+  WeatherClient() : super() {
+    _getAppId();
+  }
+
+  Future<void> _getAppId() async {
+    _appId = await SecretLoader.load();
+  }
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) {

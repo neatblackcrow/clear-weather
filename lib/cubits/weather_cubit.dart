@@ -15,16 +15,29 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
   Future<void> fetchCurrentWeather(String cityName, Units units) async {
     try {
       Response res = await _wc.fetchCurrentWeather(cityName, units.name);
-      Map<String, dynamic> body = jsonDecode(res.body);
-      if (body['cod'] == 200) {
-        emit(SuccessState(
-            data: CurrentWeather.fromJson(body),
-            cityName: cityName,
-            units: units));
-      } else if (body['cod'] == '404') {
-        emit(NotFoundState(cityName: cityName, units: units));
-      } else if (body['cod'] == 401) {
-        print('Invalid API key');
+      switch (res.statusCode) {
+        case 200:
+          CurrentWeather cw = CurrentWeather.fromJson(jsonDecode(res.body));
+          emit(SuccessState(
+              cityName: cityName,
+              units: units,
+              locationName: cw.name,
+              weather: cw.weather[0].main,
+              weatherDescription: cw.weather[0].description,
+              iconCode: cw.weather[0].icon,
+              currentTemp: cw.main.temp,
+              feelsLike: cw.main.feelsLike,
+              minTemp: cw.main.tempMin,
+              maxTemp: cw.main.tempMax,
+              humidity: cw.main.humidity,
+              windSpeed: cw.wind.speed));
+          break;
+        case 404:
+          emit(NotFoundState(cityName: cityName, units: units));
+          break;
+        case 401:
+          print('Invalid API key');
+          break;
       }
     } on HttpException catch (_) {
       emit(FailState(cityName: cityName, units: units));

@@ -2,7 +2,12 @@
 
 This application pull weather data from the OpenWeather's API. https://openweathermap.org/price (Free option)
 
-You need to obtain an API key in order to run this simple application. By apply it to the '_appId' properties in the file named 'weather_client.dart' (in the lib directory).
+You need to obtain an API key in order to run this simple application. Then create a file named 'secret.json' and put it into the 'lib/auth' directory.
+
+lib/auth/secret.json
+{
+    "appId": "" // You obtained AppID
+}
 
 
 ![](https://github.com/neatblackcrow/clear-weather/blob/master/sample.gif?raw=true)

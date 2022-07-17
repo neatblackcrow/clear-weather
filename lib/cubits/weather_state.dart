@@ -1,4 +1,3 @@
-import 'package:clear_weather/models/current_weather/current_weather.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'weather_state.g.dart';
@@ -19,10 +18,48 @@ abstract class WeatherState {
 @JsonSerializable(explicitToJson: true)
 class SuccessState extends WeatherState {
   @JsonKey(required: true, disallowNullValue: true)
-  final CurrentWeather data;
+  final String locationName;
+
+  @JsonKey(required: true, disallowNullValue: true)
+  final String weather;
+
+  @JsonKey(required: true, disallowNullValue: true)
+  final String weatherDescription;
+
+  @JsonKey(required: true, disallowNullValue: true)
+  final String iconCode;
+
+  @JsonKey(required: true, disallowNullValue: true)
+  final double currentTemp;
+
+  @JsonKey(required: true, disallowNullValue: true)
+  final double feelsLike;
+
+  @JsonKey(required: true, disallowNullValue: true)
+  final double minTemp;
+
+  @JsonKey(required: true, disallowNullValue: true)
+  final double maxTemp;
+
+  @JsonKey(required: true, disallowNullValue: true)
+  final int humidity;
+
+  @JsonKey(required: true, disallowNullValue: true)
+  final double windSpeed;
 
   const SuccessState(
-      {required this.data, required String cityName, required Units units})
+      {required this.locationName,
+      required this.weather,
+      required this.weatherDescription,
+      required this.iconCode,
+      required this.currentTemp,
+      required this.feelsLike,
+      required this.minTemp,
+      required this.maxTemp,
+      required this.humidity,
+      required this.windSpeed,
+      required String cityName,
+      required Units units})
       : super(cityName: cityName, units: units);
 
   factory SuccessState.fromJson(Map<String, dynamic> json) =>
