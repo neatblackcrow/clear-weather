@@ -1,3 +1,5 @@
+import 'package:clear_weather/cubits/setting_cubit.dart';
+import 'package:clear_weather/cubits/setting_state.dart';
 import 'package:clear_weather/pages/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +12,7 @@ import 'pages/fail.dart';
 import 'pages/not_found.dart';
 import 'pages/success.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final storage = await HydratedStorage.build(
       storageDirectory: await getApplicationDocumentsDirectory());
@@ -22,16 +24,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Clear weather',
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          iconTheme: const IconThemeData(color: Colors.white)),
-      home: BlocProvider(
-        create: (_) => WeatherCubit(),
-        child: const WeatherPage(),
-      ),
-    );
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<WeatherCubit>(create: (_) => WeatherCubit()),
+          BlocProvider<SettingCubit>(create: (_) => SettingCubit())
+        ],
+        child: MaterialApp(
+            title: 'Clear weather',
+            theme: ThemeData(
+                primarySwatch: Colors.blue,
+                iconTheme: const IconThemeData(color: Colors.white)),
+            home: const WeatherPage()));
   }
 }
 
@@ -39,12 +42,13 @@ class WeatherPage extends StatelessWidget {
   const WeatherPage({Key? key}) : super(key: key);
 
   Widget _selectPageByState(WeatherState state) {
-    if (state is SuccessState) {
-      return SuccessPage(state);
-    } else if (state is FailState) {
-      return FailPage(state);
-    } else {
-      return const NotFoundPage();
+    switch (state.stateType) {
+      case EWeatherState.success:
+        return SuccessPage(state as SuccessState);
+      case EWeatherState.notFound:
+        return const NotFoundPage();
+      case EWeatherState.fail:
+        return const FailPage();
     }
   }
 
@@ -58,12 +62,15 @@ class WeatherPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: <Widget>[
-            IconButton(
-                icon: const Icon(Icons.search),
-                tooltip: 'location',
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => SearchPage(context,
-                        cityName: state.cityName, units: state.units))))
+            BlocBuilder<SettingCubit, SettingState>(
+                builder: (context, state) => IconButton(
+                    icon: const Icon(Icons.search),
+                    tooltip: 'location',
+                    onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => SearchPage(context,
+                                cityName: (state as SavedState).cityName,
+                                units: state.units))))),
           ],
         ),
         body: _selectPageByState(state),

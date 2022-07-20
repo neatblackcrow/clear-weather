@@ -1,4 +1,6 @@
 import 'package:clear_weather/components/labeled_radio.dart';
+import 'package:clear_weather/cubits/setting_cubit.dart';
+import 'package:clear_weather/cubits/setting_state.dart';
 import 'package:clear_weather/cubits/weather_cubit.dart';
 import 'package:clear_weather/cubits/weather_state.dart';
 import 'package:flutter/material.dart';
@@ -78,19 +80,25 @@ class _SearchPageState extends State<SearchPage> {
                   BlocListener<WeatherCubit, WeatherState>(
                     bloc: BlocProvider.of<WeatherCubit>(widget.mainContext),
                     listener: (context, state) {
-                      if (state is SuccessState) {
-                        Navigator.of(context).pop();
-                      } else if (state is NotFoundState) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Location not found.'),
-                        ));
-                      } else if (state is FailState) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content:
-                              Text('Please check your internet connection.'),
-                        ));
+                      switch (state.stateType) {
+                        case EWeatherState.success:
+                          BlocProvider.of<SettingCubit>(widget.mainContext)
+                              .saveSetting(_cityName.text, _units);
+                          Navigator.of(context).pop();
+                          break;
+                        case EWeatherState.notFound:
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Location not found.'),
+                          ));
+                          break;
+                        case EWeatherState.fail:
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content:
+                                Text('Please check your internet connection.'),
+                          ));
+                          break;
                       }
                     },
                     child: ValueListenableBuilder<TextEditingValue>(

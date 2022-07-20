@@ -10,8 +10,6 @@ SuccessState _$SuccessStateFromJson(Map<String, dynamic> json) {
   $checkKeys(
     json,
     requiredKeys: const [
-      'cityName',
-      'units',
       'locationName',
       'weather',
       'weatherDescription',
@@ -24,8 +22,6 @@ SuccessState _$SuccessStateFromJson(Map<String, dynamic> json) {
       'windSpeed'
     ],
     disallowNullValues: const [
-      'cityName',
-      'units',
       'locationName',
       'weather',
       'weatherDescription',
@@ -39,25 +35,21 @@ SuccessState _$SuccessStateFromJson(Map<String, dynamic> json) {
     ],
   );
   return SuccessState(
-    locationName: json['locationName'] as String,
-    weather: json['weather'] as String,
-    weatherDescription: json['weatherDescription'] as String,
-    iconCode: json['iconCode'] as String,
-    currentTemp: (json['currentTemp'] as num).toDouble(),
-    feelsLike: (json['feelsLike'] as num).toDouble(),
-    minTemp: (json['minTemp'] as num).toDouble(),
-    maxTemp: (json['maxTemp'] as num).toDouble(),
-    humidity: json['humidity'] as int,
-    windSpeed: (json['windSpeed'] as num).toDouble(),
-    cityName: json['cityName'] as String,
-    units: $enumDecode(_$UnitsEnumMap, json['units']),
+    json['locationName'] as String,
+    json['weather'] as String,
+    json['weatherDescription'] as String,
+    json['iconCode'] as String,
+    (json['currentTemp'] as num).toDouble(),
+    (json['feelsLike'] as num).toDouble(),
+    (json['minTemp'] as num).toDouble(),
+    (json['maxTemp'] as num).toDouble(),
+    json['humidity'] as int,
+    (json['windSpeed'] as num).toDouble(),
   );
 }
 
 Map<String, dynamic> _$SuccessStateToJson(SuccessState instance) =>
     <String, dynamic>{
-      'cityName': instance.cityName,
-      'units': _$UnitsEnumMap[instance.units],
       'locationName': instance.locationName,
       'weather': instance.weather,
       'weatherDescription': instance.weatherDescription,
@@ -68,45 +60,4 @@ Map<String, dynamic> _$SuccessStateToJson(SuccessState instance) =>
       'maxTemp': instance.maxTemp,
       'humidity': instance.humidity,
       'windSpeed': instance.windSpeed,
-    };
-
-const _$UnitsEnumMap = {
-  Units.standard: 'standard',
-  Units.metric: 'metric',
-  Units.imperial: 'imperial',
-};
-
-FailState _$FailStateFromJson(Map<String, dynamic> json) {
-  $checkKeys(
-    json,
-    requiredKeys: const ['cityName', 'units'],
-    disallowNullValues: const ['cityName', 'units'],
-  );
-  return FailState(
-    cityName: json['cityName'] as String,
-    units: $enumDecode(_$UnitsEnumMap, json['units']),
-  );
-}
-
-Map<String, dynamic> _$FailStateToJson(FailState instance) => <String, dynamic>{
-      'cityName': instance.cityName,
-      'units': _$UnitsEnumMap[instance.units],
-    };
-
-NotFoundState _$NotFoundStateFromJson(Map<String, dynamic> json) {
-  $checkKeys(
-    json,
-    requiredKeys: const ['cityName', 'units'],
-    disallowNullValues: const ['cityName', 'units'],
-  );
-  return NotFoundState(
-    cityName: json['cityName'] as String,
-    units: $enumDecode(_$UnitsEnumMap, json['units']),
-  );
-}
-
-Map<String, dynamic> _$NotFoundStateToJson(NotFoundState instance) =>
-    <String, dynamic>{
-      'cityName': instance.cityName,
-      'units': _$UnitsEnumMap[instance.units],
     };

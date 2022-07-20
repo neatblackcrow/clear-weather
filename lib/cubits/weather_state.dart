@@ -1,22 +1,37 @@
+import 'package:clear_weather/cubits/base_state.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'weather_state.g.dart';
 
-enum Units { standard, metric, imperial }
+enum EWeatherState { success, notFound, fail }
 
-@immutable
-abstract class WeatherState {
-  @JsonKey(required: true, disallowNullValue: true)
-  final String cityName;
+abstract class WeatherState implements BaseState<EWeatherState> {
+  factory WeatherState.success(
+          {required String locationName,
+          required String weather,
+          required String weatherDescription,
+          required String iconCode,
+          required double currentTemp,
+          required double feelsLike,
+          required double minTemp,
+          required double maxTemp,
+          required int humidity,
+          required double windSpeed}) =>
+      SuccessState(locationName, weather, weatherDescription, iconCode,
+          currentTemp, feelsLike, minTemp, maxTemp, humidity, windSpeed);
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final Units units;
+  static const notFound = NotFoundState();
 
-  const WeatherState({required this.cityName, required this.units});
+  static const fail = FailState();
 }
 
-@JsonSerializable(explicitToJson: true)
-class SuccessState extends WeatherState {
+@immutable
+@JsonSerializable()
+class SuccessState implements WeatherState {
+  @override
+  EWeatherState get stateType => EWeatherState.success;
+
   @JsonKey(required: true, disallowNullValue: true)
   final String locationName;
 
@@ -48,19 +63,16 @@ class SuccessState extends WeatherState {
   final double windSpeed;
 
   const SuccessState(
-      {required this.locationName,
-      required this.weather,
-      required this.weatherDescription,
-      required this.iconCode,
-      required this.currentTemp,
-      required this.feelsLike,
-      required this.minTemp,
-      required this.maxTemp,
-      required this.humidity,
-      required this.windSpeed,
-      required String cityName,
-      required Units units})
-      : super(cityName: cityName, units: units);
+      this.locationName,
+      this.weather,
+      this.weatherDescription,
+      this.iconCode,
+      this.currentTemp,
+      this.feelsLike,
+      this.minTemp,
+      this.maxTemp,
+      this.humidity,
+      this.windSpeed);
 
   factory SuccessState.fromJson(Map<String, dynamic> json) =>
       _$SuccessStateFromJson(json);
@@ -68,24 +80,18 @@ class SuccessState extends WeatherState {
   Map<String, dynamic> toJson() => _$SuccessStateToJson(this);
 }
 
-@JsonSerializable()
-class FailState extends WeatherState {
-  const FailState({required String cityName, required Units units})
-      : super(cityName: cityName, units: units);
+@immutable
+class FailState implements WeatherState {
+  @override
+  EWeatherState get stateType => EWeatherState.fail;
 
-  factory FailState.fromJson(Map<String, dynamic> json) =>
-      _$FailStateFromJson(json);
-
-  Map<String, dynamic> toJson() => _$FailStateToJson(this);
+  const FailState();
 }
 
-@JsonSerializable()
-class NotFoundState extends WeatherState {
-  const NotFoundState({required String cityName, required Units units})
-      : super(cityName: cityName, units: units);
+@immutable
+class NotFoundState implements WeatherState {
+  @override
+  EWeatherState get stateType => EWeatherState.notFound;
 
-  factory NotFoundState.fromJson(Map<String, dynamic> json) =>
-      _$NotFoundStateFromJson(json);
-
-  Map<String, dynamic> toJson() => _$NotFoundStateToJson(this);
+  const NotFoundState();
 }
