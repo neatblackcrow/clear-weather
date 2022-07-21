@@ -7,7 +7,7 @@ class WeatherClient extends http.BaseClient {
   final http.Client _inner = http.Client();
 
   WeatherClient() : super() {
-    SecretLoader.load().then((value) => _appId = value);
+    loadSecret().then((value) => _appId = value);
   }
 
   @override
