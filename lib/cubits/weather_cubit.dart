@@ -29,7 +29,12 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
               minTemp: cw.main.tempMin,
               maxTemp: cw.main.tempMax,
               humidity: cw.main.humidity,
-              windSpeed: cw.wind.speed));
+              windSpeed: cw.wind.speed,
+              lastUpdated: HttpDate.parse(res.headers.entries
+                      .singleWhere((element) => element.key == 'date')
+                      .value)
+                  .toLocal(),
+              theme: ThemePreset.light));
           break;
         case 404:
           emit(WeatherState.notFound);

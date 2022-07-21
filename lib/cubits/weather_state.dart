@@ -6,6 +6,8 @@ part 'weather_state.g.dart';
 
 enum EWeatherState { success, notFound, fail }
 
+enum ThemePreset { light, dark }
+
 abstract class WeatherState implements BaseState<EWeatherState> {
   factory WeatherState.success(
           {required String locationName,
@@ -17,9 +19,22 @@ abstract class WeatherState implements BaseState<EWeatherState> {
           required double minTemp,
           required double maxTemp,
           required int humidity,
-          required double windSpeed}) =>
-      SuccessState(locationName, weather, weatherDescription, iconCode,
-          currentTemp, feelsLike, minTemp, maxTemp, humidity, windSpeed);
+          required double windSpeed,
+          required DateTime lastUpdated,
+          required ThemePreset theme}) =>
+      SuccessState(
+          locationName,
+          weather,
+          weatherDescription,
+          iconCode,
+          currentTemp,
+          feelsLike,
+          minTemp,
+          maxTemp,
+          humidity,
+          windSpeed,
+          lastUpdated,
+          theme);
 
   static const notFound = NotFoundState();
 
@@ -62,6 +77,12 @@ class SuccessState implements WeatherState {
   @JsonKey(required: true, disallowNullValue: true)
   final double windSpeed;
 
+  @JsonKey(required: true, disallowNullValue: true)
+  final DateTime lastUpdated;
+
+  @JsonKey(required: true, disallowNullValue: true)
+  final ThemePreset theme;
+
   const SuccessState(
       this.locationName,
       this.weather,
@@ -72,7 +93,9 @@ class SuccessState implements WeatherState {
       this.minTemp,
       this.maxTemp,
       this.humidity,
-      this.windSpeed);
+      this.windSpeed,
+      this.lastUpdated,
+      this.theme);
 
   factory SuccessState.fromJson(Map<String, dynamic> json) =>
       _$SuccessStateFromJson(json);

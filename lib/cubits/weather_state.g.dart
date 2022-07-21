@@ -19,7 +19,9 @@ SuccessState _$SuccessStateFromJson(Map<String, dynamic> json) {
       'minTemp',
       'maxTemp',
       'humidity',
-      'windSpeed'
+      'windSpeed',
+      'lastUpdated',
+      'theme'
     ],
     disallowNullValues: const [
       'locationName',
@@ -31,7 +33,9 @@ SuccessState _$SuccessStateFromJson(Map<String, dynamic> json) {
       'minTemp',
       'maxTemp',
       'humidity',
-      'windSpeed'
+      'windSpeed',
+      'lastUpdated',
+      'theme'
     ],
   );
   return SuccessState(
@@ -45,6 +49,8 @@ SuccessState _$SuccessStateFromJson(Map<String, dynamic> json) {
     (json['maxTemp'] as num).toDouble(),
     json['humidity'] as int,
     (json['windSpeed'] as num).toDouble(),
+    DateTime.parse(json['lastUpdated'] as String),
+    $enumDecode(_$ThemePresetEnumMap, json['theme']),
   );
 }
 
@@ -60,4 +66,11 @@ Map<String, dynamic> _$SuccessStateToJson(SuccessState instance) =>
       'maxTemp': instance.maxTemp,
       'humidity': instance.humidity,
       'windSpeed': instance.windSpeed,
+      'lastUpdated': instance.lastUpdated.toIso8601String(),
+      'theme': _$ThemePresetEnumMap[instance.theme],
     };
+
+const _$ThemePresetEnumMap = {
+  ThemePreset.light: 'light',
+  ThemePreset.dark: 'dark',
+};

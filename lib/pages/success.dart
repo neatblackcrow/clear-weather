@@ -5,6 +5,7 @@ import 'package:clear_weather/cubits/weather_cubit.dart';
 import 'package:clear_weather/cubits/weather_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class SuccessPage extends StatelessWidget {
   final SuccessState state;
@@ -42,6 +43,22 @@ class SuccessPage extends StatelessWidget {
                                   .copyWith(color: Colors.white),
                             )
                           ],
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              DateFormat('EEE d MMMM h:mm a')
+                                  .format(state.lastUpdated),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(color: Colors.white),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.min,
