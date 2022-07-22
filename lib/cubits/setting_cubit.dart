@@ -1,12 +1,18 @@
 import 'package:clear_weather/cubits/setting_state.dart';
+import 'package:clear_weather/logger.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:clear_weather/cubits/base_state.dart';
 
 class SettingCubit extends HydratedCubit<SettingState> {
   SettingCubit() : super(SettingState.save(cityName: '', units: Units.metric));
 
-  void saveSetting(String cityName, Units units) =>
-      emit(SettingState.save(cityName: cityName, units: units));
+  void saveSetting(String cityName, Units units) {
+    SettingState st = SettingState.save(cityName: cityName, units: units);
+    emit(st);
+
+    logger.i('Setting cubit current state is $st');
+    logger.v((st as SavedState).toJson());
+  }
 
   @override
   SettingState fromJson(Map<String, dynamic> json) {

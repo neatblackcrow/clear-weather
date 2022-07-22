@@ -7,6 +7,7 @@ import 'package:clear_weather/weather_client.dart';
 import 'package:clear_weather/cubits/weather_state.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:clear_weather/cubits/base_state.dart';
+import 'package:clear_weather/logger.dart';
 
 class WeatherCubit extends HydratedCubit<WeatherState> {
   final WeatherClient _wc = WeatherClient();
@@ -19,7 +20,7 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
       switch (res.statusCode) {
         case 200:
           CurrentWeather cw = CurrentWeather.fromJson(jsonDecode(res.body));
-          emit(WeatherState.success(
+          WeatherState st = WeatherState.success(
               locationName: cw.name,
               weather: cw.weather[0].main,
               weatherDescription: cw.weather[0].description,
@@ -34,19 +35,28 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
                       .singleWhere((element) => element.key == 'date')
                       .value)
                   .toLocal(),
-              theme: ThemePreset.light));
+              theme: ThemePreset.light);
+          emit(st);
+
+          logger.i('Weather cubit current state is $st');
+          logger.v((st as SuccessState).toJson());
           break;
+
         case 404:
           emit(WeatherState.notFound);
+          logger.i('Location not found.');
           break;
+
         case 401:
-          print('Invalid API key');
+          logger.e('Invalid API key.');
           break;
       }
-    } on HttpException catch (_) {
+    } on HttpException catch (ex) {
       emit(WeatherState.fail);
-    } on SocketException catch (_) {
+      logger.e(ex.message, ex);
+    } on SocketException catch (ex) {
       emit(WeatherState.fail);
+      logger.e(ex.message, ex);
     }
   }
 
