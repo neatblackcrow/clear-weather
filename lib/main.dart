@@ -1,6 +1,5 @@
 import 'package:clear_weather/cubits/setting_cubit.dart';
-import 'package:clear_weather/cubits/setting_state.dart';
-import 'package:clear_weather/pages/search_page.dart';
+import 'package:clear_weather/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -31,9 +30,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
             title: 'Clear weather',
-            theme: ThemeData(
-                primarySwatch: Colors.blue,
-                iconTheme: const IconThemeData(color: Colors.white)),
+            theme: normalTheme,
             home: const WeatherPage()));
   }
 }
@@ -54,27 +51,7 @@ class WeatherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WeatherCubit, WeatherState>(builder: (context, state) {
-      return Scaffold(
-        backgroundColor: Colors.blue,
-        appBar: AppBar(
-          title: const Text('Clear weather'),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: <Widget>[
-            BlocBuilder<SettingCubit, SettingState>(
-                builder: (context, state) => IconButton(
-                    icon: const Icon(Icons.search),
-                    tooltip: 'location',
-                    onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => SearchPage(context,
-                                cityName: (state as SavedState).cityName,
-                                units: state.units))))),
-          ],
-        ),
-        body: _selectPageByState(state),
-      );
-    });
+    return BlocBuilder<WeatherCubit, WeatherState>(
+        builder: (context, state) => _selectPageByState(state));
   }
 }

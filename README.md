@@ -12,6 +12,9 @@ lib/auth/secret.json
 
 ![](https://github.com/neatblackcrow/clear-weather/blob/master/sample.gif?raw=true)
 
+# Attribution
+
+<a href="https://www.flaticon.com/free-icons/weather" title="weather icons">Weather icons created by iconixar - Flaticon</a>
 
 A new Flutter project.
 

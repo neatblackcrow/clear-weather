@@ -6,7 +6,7 @@ part 'weather_state.g.dart';
 
 enum EWeatherState { success, notFound, fail }
 
-enum ThemePreset { light, dark }
+enum ThemePreset { clear, rain, night }
 
 abstract class WeatherState implements BaseState<EWeatherState> {
   factory WeatherState.success(

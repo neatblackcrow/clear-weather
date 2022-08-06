@@ -1,3 +1,4 @@
+import 'package:clear_weather/components/main_appbar.dart';
 import 'package:clear_weather/cubits/setting_cubit.dart';
 import 'package:clear_weather/cubits/setting_state.dart';
 import 'package:clear_weather/cubits/weather_cubit.dart';
@@ -9,31 +10,32 @@ class FailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SettingCubit, SettingState>(
-        builder: (context, state) => RefreshIndicator(
-            onRefresh: () => BlocProvider.of<WeatherCubit>(context)
-                .fetchCurrentWeather(
-                    (state as SavedState).cityName, state.units),
-            child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: ConstrainedBox(
-                    constraints: BoxConstraints.expand(
-                        height: MediaQuery.of(context).size.height -
-                            Scaffold.of(context).appBarMaxHeight!.toDouble()),
-                    child: Center(
-                        child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        const Icon(Icons.wifi_off),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text('No network connectivity.',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(color: Colors.white)),
-                      ],
-                    ))))));
+    return Scaffold(
+        appBar: const MainAppBar(),
+        body: BlocBuilder<SettingCubit, SettingState>(
+            builder: (context, state) => RefreshIndicator(
+                onRefresh: () => BlocProvider.of<WeatherCubit>(context)
+                    .fetchCurrentWeather(
+                        (state as SavedState).cityName, state.units),
+                child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: ConstrainedBox(
+                        constraints: BoxConstraints.expand(
+                            height: MediaQuery.of(context).size.height -
+                                Scaffold.of(context)
+                                    .appBarMaxHeight!
+                                    .toDouble()),
+                        child: Center(
+                            child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const Icon(Icons.wifi_off),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text('No network connectivity.',
+                                style: Theme.of(context).textTheme.titleMedium),
+                          ],
+                        )))))));
   }
 }

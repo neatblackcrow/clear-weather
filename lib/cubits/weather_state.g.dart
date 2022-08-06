@@ -71,6 +71,7 @@ Map<String, dynamic> _$SuccessStateToJson(SuccessState instance) =>
     };
 
 const _$ThemePresetEnumMap = {
-  ThemePreset.light: 'light',
-  ThemePreset.dark: 'dark',
+  ThemePreset.clear: 'clear',
+  ThemePreset.rain: 'rain',
+  ThemePreset.night: 'night',
 };

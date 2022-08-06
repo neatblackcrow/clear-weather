@@ -35,9 +35,11 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
                       .singleWhere((element) => element.key == 'date')
                       .value)
                   .toLocal(),
-              theme: ThemePreset.light);
+              theme: _currentTheme(
+                  cw.weather[0].main,
+                  DateTime.fromMillisecondsSinceEpoch(cw.dt),
+                  DateTime.fromMillisecondsSinceEpoch(cw.sys.sunset)));
           emit(st);
-
           logger.i('Weather cubit current state is $st');
           logger.v((st as SuccessState).toJson());
           break;
@@ -59,6 +61,23 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
       logger.e(ex.message, ex);
     }
   }
+
+  ThemePreset _currentTheme(
+          String mainWeather, DateTime currentTime, DateTime sunset) =>
+      (currentTime.isBefore(sunset))
+          ? {
+                'clear sky': ThemePreset.clear,
+                'few clouds': ThemePreset.clear,
+                'scattered clouds': ThemePreset.clear,
+                'broken clouds': ThemePreset.clear,
+                'shower rain': ThemePreset.rain,
+                'rain': ThemePreset.rain,
+                'thunderstorm': ThemePreset.rain,
+                'snow': ThemePreset.rain,
+                'mist': ThemePreset.rain
+              }[mainWeather] ??
+              ThemePreset.clear
+          : ThemePreset.night;
 
   @override
   Future<void> close() async {
