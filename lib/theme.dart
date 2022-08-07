@@ -10,10 +10,19 @@ final ThemeData weatherTheme = ThemeData(
         const AppBarTheme(backgroundColor: Colors.transparent, elevation: 0));
 
 const BoxDecoration clearWeatherDecoration = BoxDecoration(
-    gradient: LinearGradient(colors: [Colors.blue, Colors.white]));
+    gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Colors.blue, Color.fromARGB(255, 73, 207, 255)]));
 
 const BoxDecoration rainWeatherDecoration = BoxDecoration(
-    gradient: LinearGradient(colors: [Colors.blueGrey, Colors.white]));
+    gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Colors.blueGrey, Color.fromARGB(255, 96, 139, 134)]));
 
 const BoxDecoration nightWeatherDecoration = BoxDecoration(
-    gradient: LinearGradient(colors: [Colors.black, Colors.white]));
+    gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Colors.black, Color.fromARGB(255, 78, 76, 76)]));

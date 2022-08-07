@@ -37,8 +37,10 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
                   .toLocal(),
               theme: _currentTheme(
                   cw.weather[0].main,
-                  DateTime.fromMillisecondsSinceEpoch(cw.dt),
-                  DateTime.fromMillisecondsSinceEpoch(cw.sys.sunset)));
+                  DateTime.fromMillisecondsSinceEpoch(cw.dt + cw.timezone,
+                      isUtc: true),
+                  DateTime.fromMillisecondsSinceEpoch(cw.sys.sunset,
+                      isUtc: true)));
           emit(st);
           logger.i('Weather cubit current state is $st');
           logger.v((st as SuccessState).toJson());
@@ -66,15 +68,21 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
           String mainWeather, DateTime currentTime, DateTime sunset) =>
       (currentTime.isBefore(sunset))
           ? {
-                'clear sky': ThemePreset.clear,
-                'few clouds': ThemePreset.clear,
-                'scattered clouds': ThemePreset.clear,
-                'broken clouds': ThemePreset.clear,
-                'shower rain': ThemePreset.rain,
-                'rain': ThemePreset.rain,
-                'thunderstorm': ThemePreset.rain,
-                'snow': ThemePreset.rain,
-                'mist': ThemePreset.rain
+                'Clear': ThemePreset.clear,
+                'Clouds': ThemePreset.clear,
+                'Thunderstorm': ThemePreset.rain,
+                'Drizzle': ThemePreset.rain,
+                'Rain': ThemePreset.rain,
+                'Snow': ThemePreset.rain,
+                'Mist': ThemePreset.rain,
+                'Smoke': ThemePreset.rain,
+                'Haze': ThemePreset.rain,
+                'Dust': ThemePreset.rain,
+                'Fog': ThemePreset.rain,
+                'Sand': ThemePreset.rain,
+                'Ash': ThemePreset.rain,
+                'Squall': ThemePreset.rain,
+                'Tornado': ThemePreset.rain
               }[mainWeather] ??
               ThemePreset.clear
           : ThemePreset.night;
